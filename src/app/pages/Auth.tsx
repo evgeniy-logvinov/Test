@@ -43,11 +43,6 @@ export function Auth() {
     navigate("/auth/google");
   };
 
-  const handleAppleAuth = () => {
-    // Navigate to Apple auth flow
-    navigate("/auth/apple");
-  };
-
   return (
     <div className="min-h-screen bg-[#F5F5F5] flex flex-col">
       {/* Content */}
@@ -68,19 +63,7 @@ export function Auth() {
         </p>
 
         {/* Social Auth */}
-        <div className="space-y-3 mb-6">
-          {/* Apple */}
-          <Button
-            onClick={handleAppleAuth}
-            variant="outline"
-            className="w-full h-14 text-[16px] font-semibold bg-[#1A1A1A] border-[#1A1A1A] text-white hover:bg-[#2A2A2A]"
-          >
-            <svg className="w-5 h-5 mr-2" viewBox="0 0 24 24" fill="currentColor">
-              <path d="M17.05 20.28c-.98.95-2.05.8-3.08.35-1.09-.46-2.09-.48-3.24 0-1.44.62-2.2.44-3.06-.35C2.79 15.25 3.51 7.59 9.05 7.31c1.35.07 2.29.74 3.08.8 1.18-.24 2.31-.93 3.57-.84 1.51.12 2.65.72 3.4 1.8-3.12 1.87-2.38 5.98.48 7.13-.57 1.5-1.31 2.99-2.54 4.09l.01-.01zM12.03 7.25c-.15-2.23 1.66-4.07 3.74-4.25.29 2.58-2.34 4.5-3.74 4.25z" />
-            </svg>
-            Continue with Apple
-          </Button>
-
+        <div className="mb-6">
           {/* Google */}
           <Button
             onClick={handleGoogleAuth}
@@ -138,9 +121,19 @@ export function Auth() {
 
           {/* Password */}
           <div className="space-y-2">
-            <Label htmlFor="password" className="text-[#1A1A1A]">
-              Password
-            </Label>
+            <div className="flex items-center justify-between">
+              <Label htmlFor="password" className="text-[#1A1A1A]">
+                Password
+              </Label>
+              {isLogin && (
+                <button
+                  onClick={() => navigate("/forgot-password")}
+                  className="text-[14px] text-[#E63946] font-semibold hover:underline"
+                >
+                  Forgot password?
+                </button>
+              )}
+            </div>
             <div className="relative">
               <Lock className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-[#757575]" />
               <Input
@@ -166,7 +159,13 @@ export function Auth() {
           <p className="text-center text-[14px] text-[#757575]">
             {isLogin ? "Don't have an account? " : "Already have an account? "}
             <button
-              onClick={() => setIsLogin(!isLogin)}
+              onClick={() => {
+                if (isLogin) {
+                  navigate("/signup");
+                } else {
+                  setIsLogin(true);
+                }
+              }}
               className="text-[#E63946] font-semibold underline"
             >
               {isLogin ? "Sign Up" : "Sign In"}

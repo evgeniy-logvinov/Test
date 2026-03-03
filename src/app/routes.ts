@@ -8,6 +8,13 @@ import { Consent } from "./pages/Consent";
 import { Dashboard } from "./pages/Dashboard";
 import { Profile } from "./pages/Profile";
 import { TaskExecution } from "./pages/TaskExecution";
+import { Transcription } from "./pages/Transcription";
+import { ForgotPassword } from "./pages/ForgotPassword";
+import { ResetPassword } from "./pages/ResetPassword";
+import { PasswordResetSuccess } from "./pages/PasswordResetSuccess";
+import { Terms } from "./pages/Terms";
+import { Privacy } from "./pages/Privacy";
+import { NotFound } from "./pages/NotFound";
 
 export const router = createBrowserRouter([
   {
@@ -17,6 +24,18 @@ export const router = createBrowserRouter([
   {
     path: "/signup",
     Component: SignUp,
+  },
+  {
+    path: "/forgot-password",
+    Component: ForgotPassword,
+  },
+  {
+    path: "/reset-password",
+    Component: ResetPassword,
+  },
+  {
+    path: "/password-reset-success",
+    Component: PasswordResetSuccess,
   },
   {
     path: "/auth/google",
@@ -35,6 +54,14 @@ export const router = createBrowserRouter([
     Component: Consent,
   },
   {
+    path: "/terms",
+    Component: Terms,
+  },
+  {
+    path: "/privacy",
+    Component: Privacy,
+  },
+  {
     path: "/dashboard",
     Component: Dashboard,
   },
@@ -45,5 +72,13 @@ export const router = createBrowserRouter([
   {
     path: "/task/:taskId",
     Component: TaskExecution,
+  },
+  {
+    path: "/transcription/:taskId",
+    Component: Transcription,
+  },
+  {
+    path: "*",
+    Component: NotFound,
   },
 ]);

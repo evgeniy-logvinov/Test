@@ -3,7 +3,7 @@ import { router } from "./routes";
 import { AppProvider } from "./context/AppContext";
 import { Toaster } from "./components/ui/sonner";
 
-export default function App() {
+function App() {
   return (
     <AppProvider>
       <div className="size-full">
@@ -13,3 +13,5 @@ export default function App() {
     </AppProvider>
   );
 }
+
+export default App;

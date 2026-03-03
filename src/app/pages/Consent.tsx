@@ -29,9 +29,9 @@ export function Consent() {
         </p>
       </div>
 
-      {/* Content */}
-      <div className="flex-1 overflow-y-auto px-6 pt-6 pb-32">
-        <div className="max-w-2xl mx-auto space-y-6 text-[14px] leading-relaxed">
+      {/* Scrollable Content */}
+      <div className="flex-1 overflow-y-auto pb-32">
+        <div className="max-w-2xl mx-auto px-6 py-6 text-[14px] space-y-6">
           {/* Company Name */}
           <div className="text-center space-y-1">
             <p className="font-semibold text-[#1A1A1A]">NCSpeech Technologies Sdn Bhd</p>
@@ -232,6 +232,27 @@ export function Consent() {
             <p className="text-[#757575]">
               Dengan memilih "Ya, saya bersetuju" dalam borang, anda mengesahkan bahawa anda memahami dan menerima semua terma, anda menyertai secara sukarela, hak rakaman dipindahkan selepas pembayaran, anda memenuhi syarat kelayakan dan semua maklumat yang diberikan adalah benar.
             </p>
+          </div>
+
+          {/* Legal Documents */}
+          <div className="border-t border-gray-200 pt-4 mt-4">
+            <p className="text-[14px] text-[#757575] mb-3">
+              For more information, please review our legal documents:
+            </p>
+            <div className="flex gap-3">
+              <button
+                onClick={() => navigate("/terms")}
+                className="flex-1 h-12 bg-white border-2 border-gray-300 hover:border-[#E63946] hover:text-[#E63946] rounded-lg font-semibold text-[14px] transition-colors"
+              >
+                Terms of Service
+              </button>
+              <button
+                onClick={() => navigate("/privacy")}
+                className="flex-1 h-12 bg-white border-2 border-gray-300 hover:border-[#E63946] hover:text-[#E63946] rounded-lg font-semibold text-[14px] transition-colors"
+              >
+                Privacy Policy
+              </button>
+            </div>
           </div>
         </div>
       </div>

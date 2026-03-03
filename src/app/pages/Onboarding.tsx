@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router";
 import { Mic, Sparkles } from "lucide-react";
 import { useApp } from "../context/AppContext";
@@ -16,7 +16,7 @@ import logoImage from "figma:asset/625b1427850930e71bf38c564b3a94f00b5a55df.png"
 
 export function Onboarding() {
   const navigate = useNavigate();
-  const { setProfile, addBalance } = useApp();
+  const { setProfile, addBalance, profile } = useApp();
   const [gender, setGender] = useState("");
   const [ageGroup, setAgeGroup] = useState("");
   const [firstLanguage, setFirstLanguage] = useState("");
@@ -25,6 +25,17 @@ export function Onboarding() {
   const [occupation, setOccupation] = useState("");
   const [recordingDevice, setRecordingDevice] = useState("");
   const [agreed, setAgreed] = useState(false);
+  const [shouldNavigate, setShouldNavigate] = useState(false);
+  const hasAddedBonus = useRef(false);
+
+  // Add bonus points after profile is created
+  useEffect(() => {
+    if (profile && shouldNavigate && !hasAddedBonus.current) {
+      hasAddedBonus.current = true;
+      addBalance(5, "Profile completion bonus");
+      navigate("/consent");
+    }
+  }, [profile, shouldNavigate, addBalance, navigate]);
 
   const handleSubmit = () => {
     if (
@@ -40,6 +51,7 @@ export function Onboarding() {
       return;
     }
 
+    // Create profile with 0 points initially
     setProfile({
       gender,
       ageGroup,
@@ -49,9 +61,11 @@ export function Onboarding() {
       occupation,
       recordingDevice,
       agreedToDataProcessing: agreed,
+      points: 0,
     });
-    addBalance(5, "Profile completion bonus");
-    navigate("/consent");
+
+    // Signal that we should navigate after adding bonus
+    setShouldNavigate(true);
   };
 
   const isFormValid =

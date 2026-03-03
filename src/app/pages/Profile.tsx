@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useNavigate } from "react-router";
-import { ArrowLeft, Edit2, Check, X, TrendingUp, TrendingDown } from "lucide-react";
+import { ArrowLeft, Edit2, Check, X, TrendingUp, TrendingDown, Coins, Wallet } from "lucide-react";
 import { useApp } from "../context/AppContext";
 import { Button } from "../components/ui/button";
 import {
@@ -12,11 +12,20 @@ import {
 } from "../components/ui/select";
 import { Label } from "../components/ui/label";
 import { toast } from "sonner";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from "../components/ui/dialog";
 
 export function Profile() {
   const navigate = useNavigate();
-  const { profile, updateProfile, transactions } = useApp();
+  const { profile, updateProfile, transactions, deductBalance, user } = useApp();
   const [isEditing, setIsEditing] = useState(false);
+  const [isRedeemDialogOpen, setIsRedeemDialogOpen] = useState(false);
 
   // Edit form state
   const [gender, setGender] = useState(profile?.gender || "");
@@ -42,6 +51,7 @@ export function Profile() {
       occupation,
       recordingDevice,
       agreedToDataProcessing: profile?.agreedToDataProcessing || true,
+      points: profile?.points || 0,
     });
 
     setIsEditing(false);
@@ -58,6 +68,29 @@ export function Profile() {
     setOccupation(profile?.occupation || "");
     setRecordingDevice(profile?.recordingDevice || "");
     setIsEditing(false);
+  };
+
+  const handleRedeemPoints = () => {
+    const pointsToRedeem = profile?.points || 0;
+    
+    if (pointsToRedeem === 0) {
+      toast.error("You don't have any points to redeem");
+      return;
+    }
+
+    // Deduct all points
+    deductBalance(pointsToRedeem, "Points redeemed via TnGo Reload Pin");
+    
+    // Close dialog
+    setIsRedeemDialogOpen(false);
+    
+    // Show success message
+    toast.success(
+      `Success! The organizer will send a TnGo Reload Pin to ${user?.email || "your email"} shortly.`,
+      {
+        duration: 6000,
+      }
+    );
   };
 
   const formatDate = (date: Date) => {
@@ -165,6 +198,54 @@ export function Profile() {
 
       {/* Content */}
       <div className="flex-1 px-6 py-6 space-y-6">
+        {/* Points Balance Card */}
+        <div className="bg-gradient-to-br from-[#E63946] to-[#D62836] rounded-xl shadow-lg p-6">
+          <div className="flex items-center justify-between">
+            <div className="flex-1">
+              <p className="text-white/80 text-[14px] font-medium mb-1">
+                Current Balance
+              </p>
+              <div className="flex items-baseline gap-2">
+                <h2 className="text-white text-[36px] font-bold">
+                  {profile?.points || 0}
+                </h2>
+                <span className="text-white/90 text-[16px] font-semibold">
+                  pts
+                </span>
+              </div>
+            </div>
+            <div className="w-16 h-16 bg-white/20 rounded-full flex items-center justify-center">
+              <Coins className="w-8 h-8 text-white" />
+            </div>
+          </div>
+          
+          {/* Stats */}
+          <div className="mt-4 pt-4 border-t border-white/20 flex items-center justify-between">
+            <div>
+              <p className="text-white/70 text-[12px]">Tasks completed</p>
+              <p className="text-white text-[16px] font-semibold">
+                {transactions.filter(t => t.type === "credit" && t.description.includes("approved")).length}
+              </p>
+            </div>
+            <div className="text-right">
+              <p className="text-white/70 text-[12px]">Pending review</p>
+              <p className="text-white text-[16px] font-semibold">
+                {transactions.filter(t => t.description.includes("submitted") || t.description.includes("Under review")).length}
+              </p>
+            </div>
+          </div>
+
+          {/* Redeem Button */}
+          <Button
+            onClick={() => setIsRedeemDialogOpen(true)}
+            disabled={(profile?.points || 0) === 0}
+            className="w-full h-12 mt-4 bg-white text-[#E63946] hover:bg-white/90 font-semibold text-[14px] disabled:opacity-50 disabled:cursor-not-allowed"
+          >
+            <Wallet className="w-4 h-4 mr-2" />
+            Redeem Points
+          </Button>
+        </div>
+
         {/* Profile Information */}
         <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-5">
           <h2 className="text-[16px] font-bold text-[#1A1A1A] mb-4">
@@ -451,6 +532,44 @@ export function Profile() {
           )}
         </div>
       </div>
+
+      {/* Redeem Confirmation Dialog */}
+      <Dialog open={isRedeemDialogOpen} onOpenChange={setIsRedeemDialogOpen}>
+        <DialogContent className="max-w-[90%] sm:max-w-md rounded-xl">
+          <DialogHeader>
+            <DialogTitle className="text-[18px] font-bold text-[#1A1A1A]">
+              Redeem Points
+            </DialogTitle>
+            <DialogDescription className="text-[14px] text-[#757575] pt-2">
+              You are about to redeem <span className="font-bold text-[#E63946]">{profile?.points || 0} points</span>.
+            </DialogDescription>
+          </DialogHeader>
+          
+          <div className="py-4">
+            <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
+              <p className="text-[14px] text-blue-900">
+                The organizer will send a TnGo Reload Pin to <span className="font-semibold">{user?.email || "your email"}</span> within 1-3 business days.
+              </p>
+            </div>
+          </div>
+
+          <DialogFooter className="flex-row gap-3 sm:gap-3">
+            <Button
+              onClick={() => setIsRedeemDialogOpen(false)}
+              variant="outline"
+              className="flex-1 h-12 text-[14px] font-semibold border-gray-300 text-[#757575] hover:bg-gray-50"
+            >
+              Cancel
+            </Button>
+            <Button
+              onClick={handleRedeemPoints}
+              className="flex-1 h-12 text-[14px] font-semibold bg-[#E63946] hover:bg-[#D62836] text-white"
+            >
+              Confirm
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }

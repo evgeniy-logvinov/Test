@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from "react";
 import { useNavigate, useParams } from "react-router";
-import { ArrowLeft, Mic, Square, Send } from "lucide-react";
+import { ArrowLeft, Mic, Square, Send, AlertCircle } from "lucide-react";
 import { motion } from "motion/react";
 import { useApp } from "../context/AppContext";
 import { Button } from "../components/ui/button";
@@ -66,25 +66,64 @@ export function TaskExecution() {
       duration: 3000,
     });
 
-    // Simulate instant verification after 2 seconds
-    setTimeout(() => {
-      updateTaskStatus(task.id, "completed");
-      addBalance(task.reward, `Task completed: ${task.title}`);
+    // 50% chance of instant verification, 50% stays in pending for manual review
+    const needsManualReview = Math.random() < 0.5;
 
-      // Show reward modal with confetti
-      toast.success(`🎉 +${task.reward} points awarded! Balance updated`, {
+    if (needsManualReview) {
+      // Task stays in pending - manual review required
+      toast.info("📋 Your task is under review. Check back later for results.", {
         duration: 4000,
-        action: {
-          label: "Next tasks",
-          onClick: () => navigate("/dashboard"),
-        },
       });
 
-      // Auto navigate after 4 seconds
+      // Navigate back after 3 seconds
       setTimeout(() => {
         navigate("/dashboard");
-      }, 4000);
-    }, 2000);
+      }, 3000);
+    } else {
+      // Simulate instant verification after 2 seconds with 70% approval rate
+      setTimeout(() => {
+        const isApproved = Math.random() < 0.7;
+
+        if (isApproved) {
+          updateTaskStatus(task.id, "completed");
+          addBalance(task.reward, `Completed: ${task.title}`);
+
+          // Show reward modal
+          toast.success(`🎉 +${task.reward} points awarded! Balance updated`, {
+            duration: 4000,
+            action: {
+              label: "Next tasks",
+              onClick: () => navigate("/dashboard"),
+            },
+          });
+
+          // Auto navigate after 4 seconds
+          setTimeout(() => {
+            navigate("/dashboard");
+          }, 4000);
+        } else {
+          updateTaskStatus(task.id, "redo");
+          toast.error(
+            "❌ Recording rejected. Please review and re-record the task.",
+            {
+              duration: 4000,
+              action: {
+                label: "Retry now",
+                onClick: () => {
+                  setHasRecording(false);
+                  setRecordingTime(0);
+                },
+              },
+            }
+          );
+
+          // Auto navigate after 4 seconds
+          setTimeout(() => {
+            navigate("/dashboard");
+          }, 4000);
+        }
+      }, 2000);
+    }
   };
 
   const formatTime = (seconds: number) => {
@@ -107,6 +146,31 @@ export function TaskExecution() {
           Reward: +{task.reward} points
         </span>
       </div>
+
+      {/* Redo Warning */}
+      {task.status === "redo" && (
+        <div className="mx-6 mt-6 bg-red-50 border border-red-200 rounded-lg p-4 flex items-start gap-3">
+          <AlertCircle className="w-5 h-5 text-red-600 flex-shrink-0 mt-0.5" />
+          <div className="flex-1">
+            <h3 className="text-[16px] font-semibold text-red-800 mb-1">
+              Revision Required
+            </h3>
+            <p className="text-[14px] text-red-700 mb-2">
+              Your previous recording was not approved. Please review the feedback and record again.
+            </p>
+            {task.rejectionReason && (
+              <div className="bg-white rounded-lg p-3 mt-2">
+                <p className="text-[12px] font-semibold text-red-900 mb-1">
+                  Feedback from reviewer:
+                </p>
+                <p className="text-[13px] text-red-800">
+                  {task.rejectionReason}
+                </p>
+              </div>
+            )}
+          </div>
+        </div>
+      )}
 
       {/* Script Card */}
       <div className="flex-1 flex items-center justify-center px-6 py-12">
