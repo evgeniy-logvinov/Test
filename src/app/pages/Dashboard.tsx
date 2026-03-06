@@ -85,17 +85,18 @@ export function Dashboard() {
     };
 
     return (
-      <div className="space-y-2">
-        <div
-          onClick={handleTaskClick}
-          className={`bg-white rounded-xl p-4 shadow-sm border ${
-            task.status === "redo" ? "border-red-200 bg-red-50" : "border-gray-100"
-          } flex items-center gap-4 min-h-[72px] ${
-            task.status === "available" || task.status === "redo"
-              ? "cursor-pointer active:scale-[0.98]"
-              : ""
-          } transition-transform relative`}
-        >
+      <div
+        onClick={handleTaskClick}
+        className={`bg-white rounded-xl p-4 shadow-sm border ${
+          task.status === "redo" ? "border-red-200 bg-red-50" : "border-gray-100"
+        } ${
+          task.status === "available" || task.status === "redo"
+            ? "cursor-pointer active:scale-[0.98]"
+            : ""
+        } transition-transform relative`}
+      >
+        {/* Main Content Row */}
+        <div className="flex items-center gap-4 min-h-[72px]">
           {/* Redo Badge */}
           {task.status === "redo" && (
             <div className="absolute top-3 right-3 flex items-center gap-1 bg-red-600 text-white px-2 py-1 rounded-full">
@@ -155,16 +156,16 @@ export function Dashboard() {
           </div>
         </div>
 
-        {/* Rejection Reason - shown below the card for redo tasks */}
+        {/* Rejection Reason - full width below main content */}
         {task.status === "redo" && task.rejectionReason && (
-          <div className="bg-orange-50 border border-orange-200 rounded-lg p-3 ml-1 mr-1">
+          <div className="bg-red-100 border border-red-300 rounded-lg p-3 mt-3">
             <div className="flex items-start gap-2">
-              <AlertCircle className="w-4 h-4 text-orange-600 flex-shrink-0 mt-0.5" />
-              <div>
-                <p className="text-[12px] font-semibold text-orange-900 mb-0.5">
-                  Reason for rejection:
+              <AlertCircle className="w-4 h-4 text-red-700 flex-shrink-0 mt-0.5" />
+              <div className="flex-1 min-w-0">
+                <p className="text-[11px] font-semibold text-red-900 mb-1 uppercase tracking-wide">
+                  Reason for rejection
                 </p>
-                <p className="text-[13px] text-orange-800">
+                <p className="text-[13px] text-red-800 leading-relaxed">
                   {task.rejectionReason}
                 </p>
               </div>

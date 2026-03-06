@@ -65,7 +65,7 @@ AppContext.displayName = 'AppContext';
 const initialTasks: Task[] = [
   {
     id: "1",
-    title: "Read a short dialogue",
+    title: "Dialogue",
     duration: "~30 sec",
     reward: 15,
     script: "Navigate to the nearest coffee shop",
@@ -75,7 +75,7 @@ const initialTasks: Task[] = [
   },
   {
     id: "2",
-    title: "Record navigation command",
+    title: "Navigation",
     duration: "~20 sec",
     reward: 10,
     script: "Play music from my playlist",
@@ -84,7 +84,7 @@ const initialTasks: Task[] = [
   },
   {
     id: "3",
-    title: "Transcribe conversation audio",
+    title: "Conversation",
     duration: "~45 sec",
     reward: 20,
     type: "transcription",
@@ -99,7 +99,7 @@ const initialTasks: Task[] = [
   },
   {
     id: "4",
-    title: "Read phrase for AI training",
+    title: "Phrase",
     duration: "~25 sec",
     reward: 12,
     script: "Find the nearest gas station on the route",
@@ -108,7 +108,7 @@ const initialTasks: Task[] = [
   },
   {
     id: "5",
-    title: "Transcribe interview segment",
+    title: "Interview",
     duration: "~60 sec",
     reward: 25,
     type: "transcription",
@@ -122,7 +122,7 @@ const initialTasks: Task[] = [
   },
   {
     id: "6",
-    title: "Record short command",
+    title: "Command",
     duration: "~15 sec",
     reward: 8,
     script: "Call mom via speakerphone",
@@ -131,7 +131,7 @@ const initialTasks: Task[] = [
   },
   {
     id: "7",
-    title: "Record weather inquiry",
+    title: "Weather",
     duration: "~20 sec",
     reward: 10,
     script: "What's the weather forecast for tomorrow",
@@ -140,7 +140,7 @@ const initialTasks: Task[] = [
   },
   {
     id: "8",
-    title: "Transcribe meeting notes",
+    title: "Meeting Notes",
     duration: "~50 sec",
     reward: 22,
     type: "transcription",
@@ -154,7 +154,7 @@ const initialTasks: Task[] = [
   },
   {
     id: "9",
-    title: "Read product description",
+    title: "Product",
     duration: "~35 sec",
     reward: 14,
     script: "This smart speaker features voice control and premium sound quality",
@@ -163,7 +163,7 @@ const initialTasks: Task[] = [
   },
   {
     id: "10",
-    title: "Record traffic update",
+    title: "Traffic",
     duration: "~25 sec",
     reward: 12,
     script: "Show me alternative routes to avoid traffic",
@@ -172,7 +172,7 @@ const initialTasks: Task[] = [
   },
   {
     id: "11",
-    title: "Transcribe podcast segment",
+    title: "Podcast",
     duration: "~55 sec",
     reward: 24,
     type: "transcription",
@@ -186,7 +186,7 @@ const initialTasks: Task[] = [
   },
   {
     id: "12",
-    title: "Record alarm command",
+    title: "Alarm",
     duration: "~18 sec",
     reward: 9,
     script: "Set an alarm for 7 AM tomorrow",
@@ -195,7 +195,7 @@ const initialTasks: Task[] = [
   },
   {
     id: "13",
-    title: "Read news headline",
+    title: "News",
     duration: "~22 sec",
     reward: 11,
     script: "Breaking news: Technology advances in renewable energy",
@@ -204,7 +204,7 @@ const initialTasks: Task[] = [
   },
   {
     id: "14",
-    title: "Transcribe customer feedback",
+    title: "Feedback",
     duration: "~40 sec",
     reward: 18,
     type: "transcription",
@@ -218,7 +218,7 @@ const initialTasks: Task[] = [
   },
   {
     id: "15",
-    title: "Record reminder message",
+    title: "Reminder",
     duration: "~20 sec",
     reward: 10,
     script: "Remind me to pick up groceries at 5 PM",
@@ -227,7 +227,7 @@ const initialTasks: Task[] = [
   },
   {
     id: "16",
-    title: "Read recipe instructions",
+    title: "Recipe",
     duration: "~30 sec",
     reward: 15,
     script: "Mix the ingredients thoroughly and bake at 180 degrees",
@@ -236,7 +236,7 @@ const initialTasks: Task[] = [
   },
   {
     id: "17",
-    title: "Transcribe interview questions",
+    title: "Questions",
     duration: "~48 sec",
     reward: 21,
     type: "transcription",
@@ -250,7 +250,7 @@ const initialTasks: Task[] = [
   },
   {
     id: "18",
-    title: "Record calendar event",
+    title: "Event",
     duration: "~24 sec",
     reward: 11,
     script: "Schedule a meeting for next Monday at 2 PM",
@@ -259,7 +259,7 @@ const initialTasks: Task[] = [
   },
   {
     id: "19",
-    title: "Read safety instructions",
+    title: "Safety",
     duration: "~32 sec",
     reward: 16,
     script: "Always wear your seatbelt and follow traffic regulations",
@@ -268,7 +268,7 @@ const initialTasks: Task[] = [
   },
   {
     id: "20",
-    title: "Transcribe voice message",
+    title: "Message",
     duration: "~38 sec",
     reward: 17,
     type: "transcription",
