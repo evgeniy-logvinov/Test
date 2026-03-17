@@ -1,21 +1,14 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router";
-import { User, Coins, Mic, LogOut, FileText, AlertCircle, ArrowUpCircle, ArrowDownCircle, X } from "lucide-react";
+import { User, Coins, Mic, LogOut, FileText, AlertCircle } from "lucide-react";
 import { useApp } from "../context/AppContext";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "../components/ui/tabs";
 import { Button } from "../components/ui/button";
-import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-} from "../components/ui/dialog";
 
 export function Dashboard() {
   const navigate = useNavigate();
   const { profile, tasks, setProfile, setUser, transactions } = useApp();
   const [activeTab, setActiveTab] = useState<string>("available");
-  const [isHistoryOpen, setIsHistoryOpen] = useState(false);
   
   // Pagination state for each tab
   const [visibleAvailable, setVisibleAvailable] = useState(5);
@@ -195,7 +188,7 @@ export function Dashboard() {
           {/* Balance and Reset */}
           <div className="flex items-center gap-3">
             <button
-              onClick={() => setIsHistoryOpen(true)}
+              onClick={() => navigate("/profile")}
               className="flex items-center gap-2 bg-[#F5F5F5] px-4 py-2 rounded-full hover:bg-gray-200 transition-colors cursor-pointer active:scale-95"
             >
               <Coins className="w-5 h-5 text-[#E63946]" />
@@ -261,29 +254,9 @@ export function Dashboard() {
               {allAvailableTasks.length > 0 ? (
                 <>
                   {/* Display visible tasks */}
-                  {allAvailableTasks.slice(0, visibleAvailable).map((task, index) => {
-                    const isRedoTask = task.status === "redo";
-                    const showDivider = 
-                      index === redoTasks.length && 
-                      redoTasks.length > 0 && 
-                      availableTasks.length > 0 &&
-                      index < visibleAvailable;
-
-                    return (
-                      <div key={task.id}>
-                        <TaskCard task={task} />
-                        {showDivider && (
-                          <div className="flex items-center gap-4 py-4">
-                            <div className="flex-1 h-px bg-gray-300" />
-                            <span className="text-[12px] font-semibold text-[#757575] uppercase">
-                              New Tasks
-                            </span>
-                            <div className="flex-1 h-px bg-gray-300" />
-                          </div>
-                        )}
-                      </div>
-                    );
-                  })}
+                  {allAvailableTasks.slice(0, visibleAvailable).map((task) => (
+                    <TaskCard key={task.id} task={task} />
+                  ))}
 
                   {/* Load More Button */}
                   {visibleAvailable < allAvailableTasks.length && (
@@ -369,102 +342,6 @@ export function Dashboard() {
           </TabsContent>
         </Tabs>
       </div>
-
-      {/* Points History Modal */}
-      <Dialog open={isHistoryOpen} onOpenChange={setIsHistoryOpen}>
-        <DialogContent className="max-w-lg max-h-[80vh] overflow-y-auto">
-          <DialogHeader>
-            <DialogTitle className="text-[18px] font-bold text-[#1A1A1A] flex items-center gap-2">
-              <Coins className="w-5 h-5 text-[#E63946]" />
-              Points History
-            </DialogTitle>
-          </DialogHeader>
-
-          <div className="mt-4">
-            {/* Current Balance */}
-            <div className="bg-gradient-to-br from-[#E63946] to-[#D62836] rounded-xl p-5 mb-6">
-              <p className="text-white/80 text-[12px] font-medium mb-1">
-                Current Balance
-              </p>
-              <div className="flex items-baseline gap-2">
-                <h2 className="text-white text-[32px] font-bold">
-                  {profile?.points || 0}
-                </h2>
-                <span className="text-white/90 text-[14px] font-semibold">
-                  points
-                </span>
-              </div>
-            </div>
-
-            {/* Transaction History */}
-            {transactions.length > 0 ? (
-              <div className="space-y-3">
-                <h3 className="text-[14px] font-semibold text-[#757575] uppercase mb-3">
-                  Recent Activity
-                </h3>
-                {[...transactions]
-                  .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())
-                  .map((transaction) => (
-                    <div
-                      key={transaction.id}
-                      className="flex items-center justify-between py-3 border-b border-gray-100 last:border-0"
-                    >
-                      <div className="flex items-start gap-3 flex-1">
-                        <div
-                          className={`w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0 ${
-                            transaction.type === "credit"
-                              ? "bg-green-100"
-                              : "bg-red-100"
-                          }`}
-                        >
-                          {transaction.type === "credit" ? (
-                            <ArrowUpCircle className="w-4 h-4 text-green-600" />
-                          ) : (
-                            <ArrowDownCircle className="w-4 h-4 text-red-600" />
-                          )}
-                        </div>
-                        <div className="flex-1 min-w-0">
-                          <p className="text-[14px] font-medium text-[#1A1A1A]">
-                            {transaction.description}
-                          </p>
-                          <p className="text-[12px] text-[#757575] mt-0.5">
-                            {new Date(transaction.date).toLocaleDateString("en-US", {
-                              month: "short",
-                              day: "numeric",
-                              year: "numeric",
-                              hour: "2-digit",
-                              minute: "2-digit",
-                            })}
-                          </p>
-                        </div>
-                      </div>
-                      <div
-                        className={`text-[16px] font-bold flex-shrink-0 ml-3 ${
-                          transaction.type === "credit"
-                            ? "text-green-600"
-                            : "text-red-600"
-                        }`}
-                      >
-                        {transaction.type === "credit" ? "+" : "-"}
-                        {transaction.amount}
-                      </div>
-                    </div>
-                  ))}
-              </div>
-            ) : (
-              <div className="text-center py-8">
-                <div className="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-3">
-                  <Coins className="w-8 h-8 text-gray-400" />
-                </div>
-                <p className="text-[14px] text-[#757575]">No transactions yet</p>
-                <p className="text-[12px] text-[#757575] mt-1">
-                  Complete tasks to earn points
-                </p>
-              </div>
-            )}
-          </div>
-        </DialogContent>
-      </Dialog>
     </div>
   );
 }
